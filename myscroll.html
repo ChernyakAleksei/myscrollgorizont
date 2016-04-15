@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		body {
+    height: 1000px;
+}
+#horizontal_scroll {
+    margin:;
+    width: auto;
+    height: 100%;
+    overflow:hidden;
+    background-color: ;
+}
+.block {
+    width: 50%;
+    height: 100%;
+    overflow:hidden;
+}
+#blockleft{
+	float:left;
+	background: yellow;
+}
+#blockrigth{
+	float:right;
+	background: blue;
+}
+	</style>
+
+</head>
+
+<body>
+	 <div id="horizontal_scroll">
+    <div class = "block left" id="blockleft"></div>
+    <div class = "block rigth" id="blockrigth"></div>
+</div>
+<script>
+function addOnWheel(elem, handler) {
+      if (elem.addEventListener) {
+        if ('onwheel' in document) {
+          // IE9+, FF17+
+          elem.addEventListener("wheel", handler);
+        } else if ('onmousewheel' in document) {
+          // устаревший вариант события
+          elem.addEventListener("mousewheel", handler);
+        } else {
+          // 3.5 <= Firefox < 17, более старое событие DOMMouseScroll пропустим
+          elem.addEventListener("MozMousePixelScroll", handler);
+        }
+      } else { // IE8-
+        horizontal_scroll.attachEvent("onmousewheel", handler);
+      }
+    }
+
+    var scale = 0;
+    var rightBorder = blockleft.getBoundingClientRect().right;
+    console.log(rightBorder);
+    addOnWheel(horizontal_scroll, function(e) {
+
+      var delta = e.deltaY || e.detail || e.wheelDelta;
+
+      // отмасштабируем при помощи CSS
+      if (delta > 0) scale -= 40;
+      else scale += 40;
+
+    
+    	var windowWidth = document.documentElement.clientWidth / 2;
+   
+    console.log(blockleft.getBoundingClientRect().right);
+      if (blockleft.getBoundingClientRect().right+scale > rightBorder){
+     			e.preventDefault();
+     		return; 
+     	}
+     	blockleft.style.transform = blockleft.style.WebkitTransform = blockleft.style.MsTransform = 'translateX(' + scale + 'px'+')';
+     	blockrigth.style.transform = blockrigth.style.WebkitTransform = blockrigth.style.MsTransform = 'translateX(' + (-scale) + 'px'+')';
+
+     	if (blockleft.getBoundingClientRect().right<=0){
+     		horizontal_scroll.style.display = "none";
+     	}
+
+      // отменим прокрутку
+      e.preventDefault();
+    });
+ </script>
+</body>
+</html>
